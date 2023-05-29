@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
+import johndoe from '../public/assets/images/johndoe.jpg';
 
 
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
@@ -16,13 +17,20 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     navigator.clipboard.writeText(post.prompt);
     setTimeout(() => setCopied(""), 3000);
   }
+
+  const handleProfileClick = () => {
+    post.creator._id === session?.user.id ? router.push("/profile") : router.push(`/profile/${post.creator._id}?name=${post.creator.username}`);
+  };
   
   return (
     <div className="prompt_card">
       <div className="flex justify-between items-start gap-5">
-        <div className="flex-1 flex justify-start items-center gap-3 cursor-pointer">
+        <div 
+          className="flex-1 flex justify-start items-center gap-3 cursor-pointer"
+          onClick={handleProfileClick}
+        >
           <Image 
-            src={post.creator.image}
+            src={post.creator.image ? post.creator.image : johndoe}
             alt="user_image"
             width={40}
             height={40}
